@@ -17,3 +17,12 @@
 
 ### Text2Curves
 Открытый макрос для конвертирования текста в кривые. Есть известный макрос ConvertAllToCurves, но, во-первых, он закрыт паролем, а во-вторых, имеет ненужный мне интерфейс. 
+
+### TopPowerClip
+Помещает выбранные объекты в самый верхний из выбранных. Лезть в меню за PowerClip, потом прицеливаться и постоянно видеть ошибку из-за неточного прицеливания очень утомляет. В Adobe Illustrator это намного удобней. Поэтому делаем как там.
+
+![TopPowerClip](https://github.com/KiruKir/corel-macros-pack/blob/master/TopPowerClip.gif)
+
+Назначаем на макрос сочетание Ctrl+7. Небольшая подсказка – лучше пользоваться правым Ctrl.
+
+![right-Ctrl](https://github.com/KiruKir/corel-macros-pack/blob/master/right-Ctrl.gif)

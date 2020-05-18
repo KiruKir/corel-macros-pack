@@ -4,9 +4,10 @@
 'ResizeBitmap – меняет разрешение всех растров
 'OpenClosePath - находит открытые пути и помечает
 'RGB2CMYK - переводит все растры в CMYK (сначала в rgb, чтобы в cmyk через профиль)
-'PageToPowerClip - вставляет в p.clip выбранное, либо всё на стр.
-'MoveToDesktop - помещает выбранные объекты на Рабочий стол
+'Page2PowerClip - вставляет в p.clip выбранное, либо всё на стр.
+'Move2Desktop - помещает выбранные объекты на Рабочий стол
 'Text2Curves - открытый макрос для конвертирования текста в кривые
+'TopPowerClip - помещаем выбранные объекты в верхний PowerClip
 
 'kirukir@ya.ru -------------
 
@@ -157,7 +158,7 @@ Private Sub DoRGB2CMYK(ss As Shapes)
     Next s
 End Sub
 
-Sub PageToPowerClip()
+Sub Page2PowerClip()
 
     Dim pclip As Shape
     Dim bleed As Double
@@ -200,7 +201,7 @@ Sub PageToPowerClip()
 End Sub
 
 
-Sub MoveToDesktop()
+Sub Move2Desktop()
     Dim sr As New ShapeRange
     Set lr = ActiveDocument.MasterPage.DesktopLayer
     sr.Add ActiveSelection
@@ -243,4 +244,34 @@ Private Sub DoText2Curves(ss As Shapes)
         On Error Resume Next
         If Not s.PowerClip Is Nothing Then DoText2Curves s.PowerClip.Shapes
     Next s
+End Sub
+
+Sub TopPowerClip()
+'like in illustrator Ctrl+7 with top selected shape
+    Dim pclip As Shape
+    Dim pgSR As New ShapeRange
+    
+    ActiveDocument.BeginCommandGroup "pc"
+    If ActiveLayer.IsSpecialLayer Then
+        MsgBox "Выбран служебный слой! (направляющие, сетка, рабочий стол)"
+        Exit Sub
+    End If
+    
+    If Not ActiveShape Is Nothing Then
+        If ActiveSelection.Shapes.Count < 2 Then
+            MsgBox "Выбран один объект"
+            Exit Sub
+        End If
+        Set pclip = ActiveSelection.Shapes.Last
+        pclip.Selected = False
+        pgSR.Add ActiveSelection
+        pgSR.AddToPowerClip pclip
+        ActiveDocument.ClearSelection
+        pclip.Selected = True
+        'ActiveShape.Outline.Width = 0
+    Else
+        MsgBox "Ничего не выбрано"
+        Exit Sub
+    End If
+    ActiveDocument.EndCommandGroup
 End Sub

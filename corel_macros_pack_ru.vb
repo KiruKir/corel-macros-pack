@@ -250,6 +250,7 @@ Sub TopPowerClip()
 'like in illustrator Ctrl+7 with top selected shape
     Dim pclip As Shape
     Dim pgSR As New ShapeRange
+    Dim s As Shape
     
     ActiveDocument.BeginCommandGroup "pc"
     If ActiveLayer.IsSpecialLayer Then
@@ -262,7 +263,10 @@ Sub TopPowerClip()
             MsgBox "Выбран один объект"
             Exit Sub
         End If
-        Set pclip = ActiveSelection.Shapes.Last
+        Set pclip = ActiveSelection.Shapes.First
+        For Each s In ActiveSelection.Shapes
+            If pclip.ZOrder > s.ZOrder Then Set pclip = s
+        Next
         pclip.Selected = False
         pgSR.Add ActiveSelection
         pgSR.AddToPowerClip pclip

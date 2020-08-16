@@ -251,6 +251,7 @@ Sub TopPowerClip()
     Dim pclip As Shape
     Dim pgSR As New ShapeRange
     Dim s As Shape
+    Dim idx As Long
     
     ActiveDocument.BeginCommandGroup "pc"
     If ActiveLayer.IsSpecialLayer Then
@@ -264,8 +265,14 @@ Sub TopPowerClip()
             Exit Sub
         End If
         Set pclip = ActiveSelection.Shapes.First
+        idx = pclip.Layer.Index
         For Each s In ActiveSelection.Shapes
-            If pclip.ZOrder > s.ZOrder Then Set pclip = s
+            If idx > s.Layer.Index Then
+                Set pclip = s
+                idx = s.Layer.Index
+            Else
+                If pclip.ZOrder > s.ZOrder Then Set pclip = s
+            End If
         Next
         pclip.Selected = False
         pgSR.Add ActiveSelection
